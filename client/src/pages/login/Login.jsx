@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Context } from "../../context/Context";
 import "./login.css";
 
-const URL = 'http://192.168.1.91:5000/api/auth'
+// const URL = 'http://192.168.1.91:5000/api/auth'
 
 export default function Login() {
   const userRef = useRef();
@@ -21,7 +21,7 @@ export default function Login() {
     dispatch({ type: "LOGIN_START" });
     try {
       const res = await axios.post(
-        URL+'/login', 
+       '/auth/login', 
         {
         username: userRef.current.value,
         password: passwordRef.current.value,

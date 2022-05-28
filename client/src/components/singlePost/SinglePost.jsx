@@ -28,7 +28,7 @@ export default function SinglePost() {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`/posts/${post._id}`, {
+      await axios.delete(`/posts/${post.id}`, {
         data: { username: user.username },
       });
       window.location.replace("/");
@@ -38,9 +38,9 @@ export default function SinglePost() {
   const handleUpdate = async () => {
     try {
       await axios.put(`/posts/${post._id}`, {
-        username: user.username,
-        title,
-        desc,
+          username  : user.username,
+          title : title,
+          description: desc,
       });
       setUpdateMode(false)
     } catch (err) {}
@@ -64,7 +64,7 @@ export default function SinglePost() {
         ) : (
           <h1 className="singlePostTitle">
             {title}
-            {post.username === user?.username && (
+            {post.user === user?.username && (
               <div className="singlePostEdit">
                 <i
                   className="singlePostIcon far fa-edit"
@@ -86,7 +86,7 @@ export default function SinglePost() {
             </Link>
           </span>
           <span className="singlePostDate">
-            {new Date(post.createdAt).toDateString()}
+            {new Date(post.Createdat).toDateString()}
           </span>
         </div>
         {updateMode ? (

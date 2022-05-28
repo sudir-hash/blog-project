@@ -20,11 +20,9 @@ app.use(express.json());
 app.use("/images", express.static(path.join(__dirname, "/images")));
 app.use(cors());
 
-// app.use("/api/auth", authRoute);
 app.use("/api/", homeRoute);
-app.use("/api/users", userRoute);
-// app.use("/api/posts", postRoute);
-app.use("/api/categories", categoryRoute);
+// app.use("/api/users", userRoute);
+// app.use("/api/categories", categoryRoute);
 
 /**
  * auth routes
@@ -184,6 +182,82 @@ app.get("/api/posts/one/:id", async (req, res) => {
 });
 
 
+app.delete("/api/posts/:id", async (req, res) => {
+  try {
+    let id  = req.params.id;
+    console.log(id);  
+
+    connection.query('DELETE FROM Posts where id = ?',id, function (err, results, fields) {
+      
+        res.status(200).json(results);
+    })
+
+  } catch (err) {
+    res.status(500).json(err);
+  }
+})
+
+
+app.put("/api/posts/:id", async (req, res) => {
+  try {
+    let id  = req.params.id;
+    console.log(id);  
+
+    connection.query('UPDATE Posts SET title = ?, description = ?, username = ? WHERE id = ?',[req.body.title, req.body.description, req.body.username, id], function (err, results, fields) {
+        if(err){
+          console.log("error",err)
+        }
+        res.status(200).json(results);
+    })
+
+  } catch (err) {
+    res.status(500).json(err);
+  }
+})
+
+app.post("/api/posts/delete/", async (req, res) => {
+  
+  try {
+    // let id  = req.params.id;
+    // console.log(id);  
+    let username = req.body.username;
+    let password = req.body.password;
+    
+    connection.query('DELETE FROM accounts where username = ? AND password = ?',[username, password], function (err, results, fields) {
+        if(err){
+          console.log("error",err)
+        }
+        res.status(200).json(results);
+    })
+  } catch (err) {
+    res.status(500).json(err);
+  }
+})
+
+
+// app.post("/api/posts/delete/all", async (req, res) => {
+  
+//   try {
+//     // let id  = req.params.id;
+//     // console.log(id);  
+//     let username = req.body.username;
+//     let password = req.body.password;
+   
+//     connection.query('DELETE FROM Posts where username = ?',username, function (err, results, fields) {
+//         if(err){  console.log("error",err) }
+//         res.status(200).json(results);
+//     })
+
+//     connection.query('DELETE FROM accounts where username = ? AND password = ?',[username, password], function (err, results, fields) {
+//         if(err){
+//           console.log("error",err)
+//         }
+//         res.status(200).json(results);
+//     })
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// })
 
 app.listen("5000", () => {
 

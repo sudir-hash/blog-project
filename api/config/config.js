@@ -1,11 +1,12 @@
 const mysql = require('mysql');
 const config = {
     db: {
+      /* don't expose password or any sensitive info, done only for demo */
       host: 'localhost', // host for connection
       port: 3306, // default port for mysql is 3306
-      database: 'databse', // database from which we want to connect out node application
-      user: 'user', // username of the mysql connection
-      password: 'password' // password of the mysql connection
+      database: 'project', // database from which we want to connect out node application
+      user: 'root', // username of the mysql connection
+      password: '$u20hi06D3' // password of the mysql connection
     }
    
 };

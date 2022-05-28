@@ -8,6 +8,39 @@ change api/config/config.js
 
     replace these with respective values
 
+create tables
+1.accounts
+2.Posts
+
+accounts
+
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| id       | int          | NO   | PRI | NULL    | auto_increment |
+| username | varchar(50)  | NO   |     | NULL    |                |
+| password | varchar(255) | NO   |     | NULL    |                |
+| email    | varchar(100) | NO   |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+
+
+
+Posts
+
+
++-------------+----------------+------+-----+---------+----------------+
+| Field       | Type           | Null | Key | Default | Extra          |
++-------------+----------------+------+-----+---------+----------------+
+| title       | varchar(50)    | YES  |     | NULL    |                |
+| description | varchar(10000) | YES  |     | NULL    |                |
+| photo       | varchar(500)   | YES  |     | NULL    |                |
+| username    | varchar(100)   | YES  |     | NULL    |                |
+| categories  | varchar(50)    | YES  |     | NULL    |                |
+| id          | int            | NO   | PRI | NULL    | auto_increment |
+| Createdat   | date           | YES  |     | NULL    |                |
++-------------+----------------+------+-----+---------+----------------+
+
+
 ##To run
 
 direct into /api and /cli
