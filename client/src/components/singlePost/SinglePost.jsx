@@ -26,6 +26,9 @@ export default function SinglePost() {
     getPost();
   }, [path]);
 
+ 
+ 
+
   const handleDelete = async () => {
     try {
       await axios.delete(`/posts/${post.id}`, {
@@ -37,7 +40,7 @@ export default function SinglePost() {
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`/posts/${post._id}`, {
+      await axios.put(`/posts/${post.id}`, {
           username  : user.username,
           title : title,
           description: desc,
@@ -48,6 +51,7 @@ export default function SinglePost() {
 
   console.log("post",post);
   return (
+    
     <div className="singlePost">
       <div className="singlePostWrapper">
         {post.photo && (

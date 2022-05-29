@@ -25,7 +25,10 @@ function App() {
         <Route path="/write">{user ? <Write /> : <Register />}</Route>
         <Route path="/settings">{user ? <Settings /> : <Register />}</Route>
         <Route path="/delete">{user?<Delete/>:<Login/>}</Route>
-          
+        <Route path="/post/:postId">
+          <Single />
+        </Route>
+
         
       </Switch>
     </Router>
