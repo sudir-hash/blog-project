@@ -131,6 +131,7 @@ app.delete("/api/user/delete/", async (req, res) => {
     
     result_obj={
       message:`User ${username} deleted successfully`,
+      status: "success",
     }
 
     connection.query('DELETE FROM ACCOUNTS where USER_NAME = ? AND USER_PASSWORD = SHA2(?,256)',[username, password], function (err, results, fields) {

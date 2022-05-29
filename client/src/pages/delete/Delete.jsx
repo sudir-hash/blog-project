@@ -1,10 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Context } from "../../context/Context";
+import { useContext } from "react";
 import "./Delete.css";
 const URL = 'http://192.168.1.91:5000/api/auth'
 
 export default function Register() {
+  const { user, dispatch } = useContext(Context);
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,9 +30,12 @@ export default function Register() {
           password:password,
         }
         });
-        console.log(res.data)
+        if(res.data.status==="success"){
+          dispatch({ type: "LOGOUT" });
+
+        }
         // dispatch({  type: "LOGOUT", payload: res.data });
-        res.data && window.location.replace("/login");
+        // res.data && window.location.replace("/login");
       } catch (err) {
         setError(true);
       }
