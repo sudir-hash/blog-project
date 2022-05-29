@@ -6,6 +6,8 @@ import { Context } from "../../context/Context";
 import "./singlePost.css";
 
 export default function SinglePost() {
+
+  
   const location = useLocation();
   const path = location.pathname.split("/")[2];
   const [post, setPost] = useState({});
@@ -14,14 +16,15 @@ export default function SinglePost() {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [updateMode, setUpdateMode] = useState(false);
-
+  
+  console.log("SinglePost","User data:",user);
   useEffect(() => {
     const getPost = async () => {
-      const res = await axios.get(`/posts/one/${path}`);
+      const res = await axios.get(`/get/one/post/${path}`);
       console.log(res.data);
       setPost(res.data);
-      setTitle(res.data.title);
-      setDesc(res.data.desc);
+      setTitle(res.data.TITLE);
+      setDesc(res.data.DESCRIPTION);
     };
     getPost();
   }, [path]);
@@ -31,8 +34,8 @@ export default function SinglePost() {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`/posts/${post.id}`, {
-        data: { username: user.username },
+      await axios.delete(`/delete/one/post/${post.POST_ID}`, {
+        data: { username: user.data },
       });
       window.location.replace("/");
     } catch (err) {}
@@ -40,8 +43,9 @@ export default function SinglePost() {
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`/posts/${post.id}`, {
-          username  : user.username,
+      console.log(title)
+      await axios.put(`/update/one/post/${post.POST_ID}`, {
+          username  : user.data,
           title : title,
           description: desc,
       });
@@ -54,8 +58,8 @@ export default function SinglePost() {
     
     <div className="singlePost">
       <div className="singlePostWrapper">
-        {post.photo && (
-          <img src={PF + post.photo} alt="" className="singlePostImg" />
+        {post.PHOTO && (
+          <img src={PF + post.PHOTO} alt="" className="singlePostImg" />
         )}
         {updateMode ? (
           <input
@@ -86,11 +90,11 @@ export default function SinglePost() {
           <span className="singlePostAuthor">
             Author:
             <Link to={`/?user=${post.username}`} className="link">
-              <b> {post.username}</b>
+              <b> {post.USER_NAME}</b>
             </Link>
           </span>
           <span className="singlePostDate">
-            {new Date(post.Createdat).toDateString()}
+            {new Date(post.CREATED_AT).toDateString()}
           </span>
         </div>
         {updateMode ? (
@@ -100,7 +104,7 @@ export default function SinglePost() {
             onChange={(e) => setDesc(e.target.value)}
           />
         ) : (
-          <p className="singlePostDesc">{post.description}</p>
+          <p className="singlePostDesc">{post.DESCRIPTION}</p>
         )}
         {updateMode && (
           <button className="singlePostButton" onClick={handleUpdate}>

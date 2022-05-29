@@ -27,6 +27,51 @@ app.use("/api/", homeRoute);
 /**
  * auth routes
  */
+
+/**
+ * @deprecated
+ * @version 1.0
+ */
+
+// app.post("/api/auth/register", async (req, res) => {
+//   let username = req.body.username;
+//   let password = req.body.password;
+//   let email = req.body.email;
+//   let user = {
+//     username: username,
+//     password: password,
+//     message: "Post successful",
+//   }
+//   console.log("Post Data", user);
+
+//   try {
+
+//     if(username&&password&&email){
+//       let query   = 'INSERT INTO accounts (username, password, email) VALUES (?, ?, ?)';
+//       let values  = [username, password, email];
+//       connection.query(query,values, (error, results, fields)=> {
+
+//             if(error){
+//               console.log("error",error)
+//             }
+//             console.log(results)
+//           })
+//       res.status(200).json("Post successful");
+//     }
+//   }catch(err){
+//     console.log(err);
+//     res.status(500).json({
+//       err     : err,
+//       message : "Error in login",
+//     });
+//   }
+//   res.end();
+
+// });
+
+/**
+ * @version 1.1 
+ */
 app.post("/api/auth/register", async (req, res) => {
   let username = req.body.username;
   let password = req.body.password;
@@ -37,11 +82,14 @@ app.post("/api/auth/register", async (req, res) => {
     message: "Post successful",
   }
   console.log("Post Data", user);
-
+  res_obj=  {
+    "status": "success",
+    "message": "Post successful",
+  }
   try {
 
     if(username&&password&&email){
-      let query   = 'INSERT INTO accounts (username, password, email) VALUES (?, ?, ?)';
+      let query   = 'INSERT INTO ACCOUNTS (USER_NAME, USER_PASSWORD, USER_EMAIL) VALUES (?, SHA2(?,256), ?)';
       let values  = [username, password, email];
       connection.query(query,values, (error, results, fields)=> {
 
@@ -50,7 +98,8 @@ app.post("/api/auth/register", async (req, res) => {
             }
             console.log(results)
           })
-      res.status(200).json("Post successful");
+      
+      res.status(200).json(res_obj);
     }
   }catch(err){
     console.log(err);
@@ -64,6 +113,48 @@ app.post("/api/auth/register", async (req, res) => {
 });
 
 
+/**
+ * @deprecated
+ * @version 1.0
+ */
+
+// app.post("/api/auth/login", (req, res) => {
+//   let username = req.body.username;
+//   let password = req.body.password;
+//   try {
+
+//     if(username&&password){
+//        connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], (error, results, fields)=> {
+//             if(error){
+//               console.log("error",error)
+//             }
+//             if(results.length>0){
+//               console.log("Results",results);
+//               res.status(200).json({
+//                 isValidUser : true,
+//                 username    : username,
+//               })
+//             }else{
+//               res.status(200).json({
+//                   isValidUser:false,
+//               })
+//             }
+//          })
+//         }
+ 
+//   }catch(err){
+//     console.log(err);
+//     res.status(500).json({
+//       err     : err,
+//       message : "Error in login",
+//     });
+//   }
+
+// })
+
+/**
+ * @version 1.1
+ */
 
 app.post("/api/auth/login", (req, res) => {
   let username = req.body.username;
@@ -71,7 +162,7 @@ app.post("/api/auth/login", (req, res) => {
   try {
 
     if(username&&password){
-       connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], (error, results, fields)=> {
+       connection.query('SELECT * FROM ACCOUNTS WHERE USER_NAME = ? AND USER_PASSWORD = SHA2(?,256)', [username, password], (error, results, fields)=> {
             if(error){
               console.log("error",error)
             }
@@ -99,6 +190,24 @@ app.post("/api/auth/login", (req, res) => {
 
 })
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "images");
@@ -116,12 +225,34 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
 
 
 
-app.post("/api/posts", async (req, res) => {
-  const newPost = [req.body.title, req.body.desc, req.body.photo, req.body.username, req.body.categories];
+// app.post("/api/add/posts", async (req, res) => {
+//   const newPost = [req.body.title, req.body.desc, req.body.photo, req.body.username];
+//   newPost.push(new Date().toISOString().slice(0, 19).replace('T', ' '));
+
+//   console.log("Post Data", newPost);
+//   try {
+//     // const savedPost = await newPost.save();
+//     connection.query('INSERT INTO Posts(title,description,photo,username, categories,Createdat) values(?,?,?,?,?,?) ', newPost, function (err, results, fields) {
+//       if(err){
+//         console.log("error",err)
+//       }
+//       // connection.query('SELECT id FROM Posts where title  = ?',req.body.title, function (err, results, fields) {
+//       // })
+      
+//     })
+//     res.status(200).json(newPost);
+//     // newPost.id = results.id;
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
+
+app.post("/api/add/posts", async (req, res) => {
+  const newPost = [req.body.title, req.body.description, req.body.photo, req.body.username];
   newPost.push(new Date().toISOString().slice(0, 19).replace('T', ' '));
   try {
     // const savedPost = await newPost.save();
-    connection.query('INSERT INTO Posts(title,description,photo,username, categories,Createdat) values(?,?,?,?,?,?) ', newPost, function (err, results, fields) {
+    connection.query('INSERT INTO POSTS(TITLE,DESCRIPTION,PHOTO,USER_NAME, CREATED_AT) values(?,?,?,?,?) ', newPost, function (err, results, fields) {
       if(err){
         console.log("error",err)
       }
@@ -130,64 +261,91 @@ app.post("/api/posts", async (req, res) => {
       
     })
     res.status(200).json(newPost);
-    // newPost.id = results.id;
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
 
-app.get("/api/posts", async (req, res) => {
-  // const username = req.query.user;
-  // const catName = req.query.cat;
-  try {
-    // let posts;
-    // if (username) {
-    //   // posts = await Post.find({ username });
-    // } else if (catName) {
-    //   posts = await Post.find({
-    //     categories: {
-    //       $in: [catName],
-    //     },
-    //   });
-    // } else {
-    //   posts = await Post.find();
-    // }
-    connection.query('SELECT * FROM Posts ',[], function (err, results, fields) {
-                  res.status(200).json(results);
-    })
 
-
-    // res.status(200).json(r);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-app.get("/api/posts/one/:id", async (req, res) => {
-    console.log(req.params.id)
-  try {
+/**
+ * @deprecreated  
+ */
+// app.get("/api/get/all/posts", async (req, res) => {
+//   try {
     
-    let id  = req.params.id;
-    console.log(id);  
+//     connection.query('SELECT * FROM Posts ',[], function (err, results, fields) {
+//                   res.status(200).json(results);
+//     })
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
 
-    connection.query('SELECT * FROM Posts where id = ?',id, function (err, results, fields) {
-      
-        res.status(200).json(results[0]);
+/**
+ * @version 1.1
+ */
+app.get("/api/get/all/posts", async (req, res) => {
+  try {
+    console.log("Get all posts");
+    connection.query('SELECT * FROM POSTS ',[], function (err, results, fields) {
+      console.log("Results",results);  
+
+      res.status(200).json(results);
     })
-
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
 
-app.delete("/api/posts/:id", async (req, res) => {
+
+
+
+
+
+// app.get("/api/get/one/post/:id", async (req, res) => {
+//     console.log(req.params.id)
+//   try {
+    
+//     let id  = req.params.id;
+//     console.log(id);  
+
+//     connection.query('SELECT * FROM Posts where id = ?',id, function (err, results, fields) {
+      
+//         res.status(200).json(results[0]);
+//     })
+
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
+
+app.get("/api/get/one/post/:id", async (req, res) => {
+  console.log(req.params.id)
+try {
+  
+  let id  = req.params.id;
+  console.log("REQUEST ID",id);  
+
+  connection.query('SELECT * FROM POSTS where POST_ID = ?',id, function (err, results, fields) {
+      console.log("Results",results);
+      res.status(200).json(results[0]);
+  })
+
+} catch (err) {
+  res.status(500).json(err);
+}
+});
+
+
+
+app.delete("/api/delete/one/post/:id", async (req, res) => {
   try {
     let id  = req.params.id;
-    console.log(id);  
+    console.log("REQID",id);  
 
-    connection.query('DELETE FROM Posts where id = ?',id, function (err, results, fields) {
+    connection.query('DELETE FROM POSTS where POST_ID = ?',id, function (err, results, fields) {
       
         res.status(200).json(results);
     })
@@ -198,12 +356,12 @@ app.delete("/api/posts/:id", async (req, res) => {
 })
 
 
-app.put("/api/posts/:id", async (req, res) => {
+app.put("/api/update/one/post/:id", async (req, res) => {
   try {
     let id  = req.params.id;
     console.log(id);  
 
-    connection.query('UPDATE Posts SET title = ?, description = ?, username = ? WHERE id = ?',[req.body.title, req.body.description, req.body.username, id], function (err, results, fields) {
+    connection.query('UPDATE POSTS SET TITLE = ?, DESCRIPTION = ?, USER_NAME = ? WHERE POST_ID = ?',[req.body.title, req.body.description, req.body.username, id], function (err, results, fields) {
         if(err){
           console.log("error",err)
         }
@@ -215,19 +373,29 @@ app.put("/api/posts/:id", async (req, res) => {
   }
 })
 
-app.post("/api/posts/delete/", async (req, res) => {
+app.delete("/api/user/delete/", async (req, res) => {
   
+  console.log("Delete User"+req.body.username+" "+req.body.password);
+
   try {
-    // let id  = req.params.id;
-    // console.log(id);  
+    
+    
+
+
+
     let username = req.body.username;
     let password = req.body.password;
     
-    connection.query('DELETE FROM accounts where username = ? AND password = ?',[username, password], function (err, results, fields) {
+    result_obj={
+      message:`User ${username} deleted successfully`,
+    }
+
+    connection.query('DELETE FROM ACCOUNTS where USER_NAME = ? AND USER_PASSWORD = SHA2(?,256)',[username, password], function (err, results, fields) {
         if(err){
           console.log("error",err)
         }
-        res.status(200).json(results);
+        if(results.affectedRows > 0)  
+            res.status(200).json(result_obj);
     })
   } catch (err) {
     res.status(500).json(err);

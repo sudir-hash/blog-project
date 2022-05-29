@@ -16,14 +16,18 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(false);
+    console.log("deleting"+username)
 
     if(email === 'No' ){
       try {
-        const res = await axios.post(
-        '/posts/delete/', {
-          username:username,
+        const res = await axios.delete(
+        '/user/delete/', {
+          data:{username:username,
           password:password,
+        }
         });
+        console.log(res.data)
+        // dispatch({  type: "LOGOUT", payload: res.data });
         res.data && window.location.replace("/login");
       } catch (err) {
         setError(true);

@@ -14,7 +14,7 @@ export default function Write() {
     const newPost = {
       username  : user,
       title     : title,
-      desc      : desc,
+      description      : desc,
     };
     if (file) {
       console.log("file", file);
@@ -30,7 +30,7 @@ export default function Write() {
       } catch (err) {}
     }
     try {
-      const res = await axios.post('http://192.168.1.91:5000/api/posts', newPost);
+      const res = await axios.post('/add/posts/', newPost);
       window.location.replace("/");
     } catch (err) {}
   };

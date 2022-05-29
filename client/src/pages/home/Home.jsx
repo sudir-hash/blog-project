@@ -12,9 +12,9 @@ export default function Home() {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await axios.get("/posts/");
+      const res = await axios.get("/get/all/posts/");
       setPosts(res.data);
-      console.log(res.data);
+      console.log("Result:",res.data);
     };
     fetchPosts();
   }, [search]);
