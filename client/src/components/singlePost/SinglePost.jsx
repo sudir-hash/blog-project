@@ -54,6 +54,7 @@ export default function SinglePost() {
   };
 
   console.log("post",post);
+  console.log(post.USER_NAME  === user);
   return (
     
     <div className="singlePost">
@@ -72,18 +73,23 @@ export default function SinglePost() {
         ) : (
           <h1 className="singlePostTitle">
             {title}
-            {post.user === user?.username && (
-              <div className="singlePostEdit">
-                <i
-                  className="singlePostIcon far fa-edit"
-                  onClick={() => setUpdateMode(true)}
-                ></i>
-                <i
-                  className="singlePostIcon far fa-trash-alt"
-                  onClick={handleDelete}
-                ></i>
-              </div>
-            )}
+            {
+              post.USER_NAME  === user?(  
+                <div className="singlePostEdit">
+                  <i
+                    className="singlePostIcon far fa-edit"
+                    onClick={() => setUpdateMode(true)}
+                  />
+                  <i
+                    className="singlePostIcon far fa-trash-alt"
+                    onClick={handleDelete}
+                  />
+              </div>              
+              ):(
+                null
+              )
+                
+            }
           </h1>
         )}
         <div className="singlePostInfo">

@@ -8,9 +8,11 @@ export default function Write() {
   const [desc, setDesc] = useState("");
   const [file, setFile] = useState(null);
   const { user } = useContext(Context);
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("user", user);
     const newPost = {
       username  : user,
       title     : title,
